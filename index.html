@@ -1,0 +1,132 @@
+<!DOCTYPE html style="height: 100%; width: 100%;">
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+<h2 style="font-weight: normal; font-family: Arial;"><b>Range Endpoint Simulator</b>
+<br>or whatever u wanna call it its just cool</span>
+<br><hr style="float: left; width: 365px;"></h2> 
+<br>
+<span id="currentnumber"></span><br><br>
+attempts: <b><span id="attempts">0</span></b><br>
+timer: <b><span id="timer">0</span></b>
+
+<br>
+<h1>highest number generated:<br><span style="padding-left: 20px; font-weight: normal; font-size: 25px;" id="highest">0</span>
+<br><span style="font-weight: normal; font-size: 15px;">chance to generate higher: <b><span id="chancetoGH">-</span></b></span>
+</h1>
+
+
+<h1>lowest number generated:<br><span style="padding-left: 20px; font-weight: normal; font-size: 25px;"><span id="lowest">0</span>
+<br><span style="font-weight: normal; font-size: 15px;">chance to generate lower: <b><span id="chancetoGL">-</span></b></span>
+</h1>
+
+<br><br>
+generating numbers: 0 - <input id="highestInput" style="width: 200px;" value="1000000"></input>
+ <button onClick="changeMax()">change maximum and reset</button>
+ 
+<!--
+<br>reset rate: <input id="highestInput" style="width: 30px;" value="0"></input> miliseconds
+-->
+<br><br>
+<button style="height: 30px; width: 200px;" onClick="manualReset()">reset</button>
+
+<script>
+var attempts = 0;
+var maxPossible = 1000000;
+var rand = random(0,maxPossible);
+var highest = rand;
+var lowest = rand;
+var chancetoGH = 0;
+var chancetoGL = 0;
+var resetRate = 0;
+var timer = 0;
+var completed = 0;
+
+function changeMax() {
+  maxPossible -= maxPossible;
+  maxPossible += document.getElementById("highestInput").value;
+  manualReset();
+}
+
+function manualReset() {
+  timertimer = timertimer-timertimer;
+  timer = 0; document.getElementById("timer").innerHTML = thousands_separators(timer);
+  attempts -= attempts;
+  rand -= rand;
+  rand += random(0,maxPossible);
+  highest -= highest;
+  lowest -= lowest;
+  highest += random(0,maxPossible);
+  lowest += random(0,maxPossible);
+  chancetoGH -= chancetoGH;
+  chancetoGL -= chancetoGL;
+  console.log("_______________RESET")
+  completed -= completed;
+
+}
+
+  document.getElementById("currentnumber").innerHTML = thousands_separators(rand);
+  document.getElementById("highest").innerHTML = thousands_separators(highest);
+  document.getElementById("lowest").innerHTML = thousands_separators(lowest);
+  
+function thousands_separators(num) { var num_parts = num.toString().split(".");num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");return num_parts.join(".");}
+
+
+function random(min, max) { 
+return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+function reset() {
+  rand = random(0,maxPossible);
+  document.getElementById("currentnumber").innerHTML = thousands_separators(rand);
+
+chancetoGH = (maxPossible - highest) / maxPossible;
+document.getElementById("chancetoGH").innerHTML = thousands_separators((chancetoGH * 100).toFixed(4)) + "%";
+let chancetoGL = lowest / maxPossible;
+document.getElementById("chancetoGL").innerHTML = thousands_separators((chancetoGL * 100).toFixed(4)) + "%";
+
+
+	if (rand > highest) {
+	  highest = rand; 
+	  document.getElementById("highest").innerHTML = thousands_separators(highest);
+
+		   if (highest == maxPossible) {
+		console.log("highest possible number(" +(maxPossible)+") generated in " + attempts + " attempts");
+		completed +=1;
+		  }
+	}
+	if (rand < lowest) {
+	  lowest = rand; 
+	  document.getElementById("lowest").innerHTML = thousands_separators(lowest);
+	  
+
+	   if (lowest == 0) {
+	console.log("lowest possible number(0) generated in " + attempts + " attempts");
+	completed +=1;
+	  }
+	}
+}
+
+var refresh = setInterval(function() {
+  if (completed != 2) {
+attempts += 1;
+document.getElementById("attempts").innerHTML = thousands_separators(attempts);
+}
+reset();
+}, resetRate);
+
+var timertimer = setInterval(function() {
+  if (completed != 2) {
+timer += 0.1;
+document.getElementById("timer").innerHTML = thousands_separators( (Math.round(timer * 100) / 100).toFixed(1));
+}}, 100);
+
+
+
+
+
+reset();
+</script>
+</body>
+</html>
